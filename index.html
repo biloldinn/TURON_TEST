@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TURON O'QUV MARKAZI - AI Test Tizimi</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #4e73df;
+            --secondary: #858796;
+            --success: #1cc88a;
+            --info: #36b9cc;
+            --warning: #f6c23e;
+            --danger: #e74a3b;
+            --light: #f8f9fc;
+            --dark: #5a5c69;
+            --bg-color: #f3f4f6;
+            --text-color: #333;
+            --card-bg: #fff;
+        }
+
+        [data-theme="dark"] {
+            --primary: #375a7f;
+            --bg-color: #1a1a1a;
+            --text-color: #f8f9fa;
+            --card-bg: #2c2c2c;
+            --light: #2c2c2c;
+            --dark: #f8f9fa;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .card,
+        .modal-content {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Login Section */
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .admin-login-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--danger);
+            color: white;
+            border-radius: 50px;
+            padding: 10px 20px;
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+            z-index: 1000;
+            border: none;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .admin-login-btn:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(220, 53, 69, 0.4);
+        }
+
+        .test-card {
+            transition: all 0.3s;
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            background: white;
+            height: 100%;
+        }
+
+        .test-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .timer {
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            padding: 15px 30px;
+            background: var(--danger);
+            border-radius: 0 0 15px 15px;
+            text-align: center;
+            min-width: 150px;
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+            border: none;
+        }
+
+        .timer.warning {
+            background: #ffc107;
+            color: #333;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: translateX(-50%) scale(1);
+            }
+
+            50% {
+                transform: translateX(-50%) scale(1.05);
+            }
+
+            100% {
+                transform: translateX(-50%) scale(1);
+            }
+        }
+
+        .admin-sidebar {
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: #2c3e50;
+            color: white;
+            padding-top: 20px;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .admin-content {
+            margin-left: 250px;
+            padding: 20px;
+            min-height: 100vh;
+            background: #f8f9fa;
+        }
+
+        .nav-link-admin {
+            display: block;
+            padding: 12px 20px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-link-admin:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding-left: 25px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .nav-link-admin.active {
+            background: rgba(52, 152, 219, 0.2);
+            color: #3498db;
+            border-left: 4px solid #3498db;
+        }
+
+        .nav-link-admin.ai {
+            border-left: 3px solid var(--ai-color);
+        }
+
+        .student-nav {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .question-box {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid var(--primary);
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--primary);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-ai {
+            background: var(--ai-color);
+            color: white;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .btn-ai:hover {
+            background: #7b1fa2;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .text-ai {
+            color: var(--ai-color);
+        }
+
+        .bg-ai {
+            background: var(--ai-color);
+        }
+
+        .drop-zone {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f8f9fa;
+        }
+
+        .drop-zone:hover {
+            border-color: var(--ai-color);
+            background: #e8f4fc;
+        }
+
+        .student-monitor {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .student-monitor.active {
+            border-left: 4px solid var(--success);
+            background: #e8f5e8;
+        }
+
+        .screen-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .screen-item {
+            background: #495057;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .screen-item video {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #000;
+        }
+
+        .screen-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            font-size: 12px;
+            z-index: 10;
+        }
+
+        @media (max-width: 768px) {
+            .admin-sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+
+            .admin-sidebar.active {
+                transform: translateX(0);
+            }
+
+            .admin-content {
+                margin-left: 0;
+                padding: 15px;
+            }
+        }
+
+        .ai-pulse {
+            animation: aiPulse 2s infinite;
+        }
+
+        @keyframes aiPulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Question Navigation */
+        .q-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .q-bubble {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .q-bubble.active {
+            border-color: var(--primary);
+            background: #e3f2fd;
+        }
+
+        .q-bubble.answered {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .q-bubble.skipped {
+            background: var(--warning);
+            color: #333;
+            border-color: var(--warning);
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #printArea,
+            #printArea * {
+                visibility: visible;
+            }
+
+            #printArea {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- STUDENT & PUBLIC UI -->
+
+    <button class="admin-login-btn no-print" onclick="showAdminLoginModal()">
+        <i class="fas fa-lock"></i> Admin Panel
+    </button>
+
+    <!-- Login Section -->
+    <div id="loginSection" class="section active">
+        <div class="container">
+            <div class="login-container">
+                <div class="text-center mb-4">
+                    <i class="fas fa-graduation-cap fa-3x text-primary mb-3"></i>
+                    <h2>Turon O'quv Markazi</h2>
+                    <p class="text-muted">AI Test Tizimi</p>
+                </div>
+
+                <div id="studentLoginForm">
+                    <div class="mb-3">
+                        <label class="form-label">Telefon raqam</label>
+                        <input type="tel" class="form-control" id="studentPhone" placeholder="+998901234567">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Parol</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="studentPassword">
+                            <button class="btn btn-outline-secondary" type="button"
+                                onclick="togglePassword('studentPassword')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary w-100 mb-3" onclick="loginStudent()">
+                        <i class="fas fa-sign-in-alt"></i> Kirish
+                    </button>
+                    <p class="text-center mb-0">
+                        Yangi o'quvchimisiz?
+                        <a href="#" class="text-decoration-none" onclick="showRegister()">Ro'yxatdan o'ting</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Section -->
+    <div id="registerSection" class="section">
+        <div class="container">
+            <div class="login-container">
+                <h3 class="text-center mb-4">Ro'yxatdan o'tish</h3>
+                <input type="text" class="form-control mb-3" id="regFirstName" placeholder="Ism">
+                <input type="text" class="form-control mb-3" id="regLastName" placeholder="Familiya">
+                <input type="tel" class="form-control mb-3" id="regPhone" placeholder="Telefon (+998...)">
+                <input type="text" class="form-control mb-3" id="regGroup" placeholder="Guruh (232)">
+                <input type="password" class="form-control mb-3" id="regPassword" placeholder="Parol">
+                <button class="btn btn-success w-100 mb-3" onclick="registerStudent()">Ro'yxatdan o'tish</button>
+                <button class="btn btn-outline-secondary w-100" onclick="showLogin()">Kirish</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Dashboard -->
+    <div id="studentSection" class="section">
+        <nav class="student-nav">
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="mb-0 text-primary">Turon Student</h4>
+                        <small id="studentInfo" class="text-muted"></small>
+                    </div>
+                    <div>
+                        <button class="btn btn-warning me-2" id="shareScreenBtn" onclick="toggleScreenShare()">
+                            <i class="fas fa-desktop"></i> Ekran Ulashish
+                        </button>
+                        <button class="btn btn-outline-danger" onclick="logout()">Chiqish</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="container" id="studentContent"></div>
+    </div>
+
+    <!-- ADMIN UI -->
+    <div id="adminSection" class="section">
+        <div class="admin-sidebar">
+            <div class="text-center mb-4 px-3">
+                <h4 class="mb-1 text-white">Turon Admin</h4>
+                <div class="mt-3"><span class="badge bg-success" id="onlineCount">Online: 0</span></div>
+            </div>
+            <div class="nav-links">
+                <a href="#" class="nav-link-admin" onclick="showAdminDashboard()">Dashboard</a>
+                <a href="#" class="nav-link-admin ai" onclick="showAITestCreator()">AI Test Yaratish</a>
+                <a href="#" class="nav-link-admin text-info" onclick="showManualTestCreator()"><i
+                        class="fas fa-plus-circle"></i> Qo'lda Test Qo'shish</a>
+                <a href="#" class="nav-link-admin" onclick="showAdminTests()">Barcha Testlar</a>
+                <a href="#" class="nav-link-admin" onclick="showStudents()">O'quvchilar & Guruhlar</a>
+                <a href="#" class="nav-link-admin" onclick="showAdminResults()">Natijalar & Statistika</a>
+                <a href="#" class="nav-link-admin" onclick="showLiveMonitoring()">Live Monitoring</a>
+                <a href="#" class="nav-link-admin" onclick="showScreenMirror()">Screen Mirror (Beta)</a>
+                <a href="#" class="nav-link-admin text-warning mt-5" onclick="logout()">Chiqish</a>
+            </div>
+        </div>
+        <div class="admin-content">
+            <div id="adminContent"></div>
+        </div>
+    </div>
+
+    <!-- MODALS -->
+    <!-- Admin Login -->
+    <div class="modal fade" id="adminLoginModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Admin Kirish</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control mb-3" id="adminPhone" placeholder="Login">
+                    <input type="password" class="form-control mb-3" id="adminPassword" placeholder="Parol">
+                    <button class="btn btn-danger w-100" onclick="loginAdmin()">Kirish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Test Modal -->
+    <div class="modal fade" id="aiTestModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header bg-ai text-white">
+                    <h5 class="modal-title">AI Test Yaratish</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="drop-zone" id="aiDropZone">
+                                <i class="fas fa-cloud-upload-alt fa-3x text-ai"></i>
+                                <p>Faylni yuklang (PDF)</p>
+                                <input type="file" id="aiFileInput" style="display:none;" accept=".pdf">
+                            </div>
+                            <div id="aiFileName" class="mt-2 text-primary fw-bold"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control mb-3" id="aiTestSubject"
+                                placeholder="Mavzu (Fizika)">
+                            <select class="form-select mb-3" id="aiQuestionCount">
+                                <option value="5">5 ta</option>
+                                <option value="10" selected>10 ta</option>
+                                <option value="20">20 ta</option>
+                            </select>
+                            <input type="number" class="form-control mb-3" id="aiTimeLimit" value="20"
+                                placeholder="Vaqt (daqiqa)">
+                            <input type="number" class="form-control mb-3" id="aiPass" value="60"
+                                placeholder="O'tish % (60)">
+                            <input type="text" class="form-control mb-3" id="aiGroupCode" placeholder="Guruh (232)">
+                            <button class="btn btn-ai w-100" onclick="generateAITest()">Generatsiya</button>
+                        </div>
+                    </div>
+                    <div id="aiProcessingStatus" style="display:none;" class="text-center mt-3">
+                        <i class="fas fa-robot fa-spin fa-2x text-ai"></i> <span class="ai-pulse">AI
+                            ishlamoqda...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manual Test Modal -->
+    <div class="modal fade" id="manualTestModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Qo'lda Test Yaratish</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Test Nomi</label>
+                        <input type="text" class="form-control" id="mTitle" placeholder="Masalan: Ingliz tili Unit 5">
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Fan (Kategoriya)</label>
+                            <select class="form-select" id="mSubject">
+                                <option value="Matematika">Matematika</option>
+                                <option value="Fizika">Fizika</option>
+                                <option value="Ingliz tili">Ingliz tili</option>
+                                <option value="Ona tili">Ona tili</option>
+                                <option value="Tarix">Tarix</option>
+                                <option value="Biologiya">Biologiya</option>
+                                <option value="Kimyo">Kimyo</option>
+                                <option value="IT/Informatika">IT/Informatika</option>
+                                <option value="Boshqa">Boshqa</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Guruh Kodi (Muhim!)</label>
+                            <input type="text" class="form-control" id="mGroup" placeholder="Masalan: 326">
+                            <small class="text-muted">Faqat shu guruh o'quvchilari ko'radi</small>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <label class="form-label">Vaqt (Daqiqa)</label>
+                            <input type="number" class="form-control" id="mTime" placeholder="20">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">O'tish Foizi (%)</label>
+                            <input type="number" class="form-control" id="mPass" value="60">
+                        </div>
+                    </div>
+                    <div class="alert alert-info py-2">
+                        <small><i class="fas fa-info-circle"></i> To'g'ri javobni belgilash uchun variant oxiriga
+                            <b>#</b> qo'ying yoki radio tugmani tanlang.</small>
+                    </div>
+                    <hr>
+                    <div id="mQuestions"></div>
+                    <button class="btn btn-sm btn-outline-primary mt-2" onclick="addMQuestion()">
+                        <i class="fas fa-plus"></i> Savol qo'shish
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" onclick="saveManualTest()">Saqlash</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+    <script>
+        // CONFIG
+        const CONFIG = { API_BASE_URL: '/api' };
+        let currentUser = JSON.parse(localStorage.getItem('current_user'));
+        let socket = null;
+        let onlineStudents = new Map();
+        let localStream = null;
+        let peerConnections = {}; // socketId -> RTCPeerConnection (For Admin)
+        let localPc = null; // For Student
+        let mQuestionsCount = 0;
+
+        // ICE Servers (Public STUN)
+        const iceConfig = {
+            iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (currentUser) {
+                connectSocket();
+                if (currentUser.role === 'admin') showAdminDashboard();
+                else showStudentTests();
+            } else showLogin();
+        });
+
+        // --- NAVIGATION ---
+        function showLogin() {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById('loginSection').classList.add('active');
+        }
+        function showRegister() {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById('registerSection').classList.add('active');
+        }
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+        function showAdminLoginModal() {
+            new bootstrap.Modal(document.getElementById('adminLoginModal')).show();
+        }
+        function togglePassword(id) {
+            const el = document.getElementById(id);
+            el.type = el.type === 'password' ? 'text' : 'password';
+        }
+
+        // --- AUTH ---
+        async function loginStudent() {
+            const phone = document.getElementById('studentPhone').value;
+            const password = document.getElementById('studentPassword').value;
+            try {
+                const res = await fetch(`${CONFIG.API_BASE_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone, password })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    currentUser = data.user;
+                    localStorage.setItem('current_user', JSON.stringify(currentUser));
+                    connectSocket();
+                    showStudentTests();
+                } else alert(data.error);
+            } catch (e) { alert('Xatolik'); }
+        }
+
+        async function registerStudent() {
+            const body = {
+                firstName: document.getElementById('regFirstName').value,
+                lastName: document.getElementById('regLastName').value,
+                phone: document.getElementById('regPhone').value,
+                groupCode: document.getElementById('regGroup').value,
+                password: document.getElementById('regPassword').value
+            };
+            await fetch(`${CONFIG.API_BASE_URL}/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            alert('Ro\'yxatdan o\'tdingiz! Endi kirishingiz mumkin.');
+            showLogin();
+        }
+
+        async function loginAdmin() {
+            const phone = document.getElementById('adminPhone').value;
+            const password = document.getElementById('adminPassword').value;
+            const res = await fetch(`${CONFIG.API_BASE_URL}/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phone, password })
+            });
+            const data = await res.json();
+            if (data.success && data.user.role === 'admin') {
+                currentUser = data.user;
+                localStorage.setItem('current_user', JSON.stringify(currentUser));
+                bootstrap.Modal.getInstance(document.getElementById('adminLoginModal')).hide();
+                connectSocket();
+                showAdminDashboard();
+            } else alert('Xato login yoki parol');
+        }
+
+        function logout() {
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+                localStream = null;
+            }
+            if (socket) socket.disconnect();
+            localStorage.removeItem('current_user');
+            currentUser = null;
+            location.reload();
+        }
+
+        // --- SOCKET & WEBRTC ---
+        function connectSocket() {
+            socket = io();
+            socket.emit('auth', currentUser);
+
+            socket.on('online_update', (data) => {
+                onlineStudents = new Map(Object.entries(data));
+                const count = Array.from(onlineStudents.values()).filter(s => s.status === 'online').length;
+                document.getElementById('onlineCount').textContent = `Online: ${count}`;
+                if (document.getElementById('monitorList')) showLiveMonitoring();
+                if (document.getElementById('screenGrid')) showScreenMirror();
+            });
+
+            // Student: Receive request to share
+            socket.on('join_stream', async (data) => {
+                // Admin requested stream
+                if (localStream) {
+                    createPeerConnectionForStudent(data.adminSocketId);
+                }
+            });
+
+            // Admin: Receive Answer
+            socket.on('screen_answer', async (data) => {
+                const pc = peerConnections[data.fromSocketId];
+                if (pc) await pc.setRemoteDescription(new RTCSessionDescription(data.answer));
+            });
+
+            socket.on('screen_offer', async (data) => {
+                // Admin receives offer from student
+                const pc = new RTCPeerConnection(iceConfig);
+                peerConnections[data.fromSocketId] = pc;
+
+                pc.onicecandidate = event => {
+                    if (event.candidate) {
+                        socket.emit('screen_candidate', { targetSocketId: data.fromSocketId, candidate: event.candidate });
+                    }
+                };
+
+                pc.ontrack = event => {
+                    const video = document.getElementById(`vid_${data.fromSocketId}`);
+                    if (video) video.srcObject = event.streams[0];
+                };
+
+                await pc.setRemoteDescription(new RTCSessionDescription(data.offer));
+                const answer = await pc.createAnswer();
+                await pc.setLocalDescription(answer);
+
+                socket.emit('screen_answer', { targetSocketId: data.fromSocketId, answer });
+            });
+
+            socket.on('screen_candidate', async (data) => {
+                const pc = currentUser.role === 'admin' ? peerConnections[data.fromSocketId] : localPc;
+                if (pc) await pc.addIceCandidate(new RTCIceCandidate(data.candidate));
+            });
+        }
+
+        async function toggleScreenShare() {
+            const btn = document.getElementById('shareScreenBtn');
+            if (localStream) {
+                // Stop
+                localStream.getTracks().forEach(t => t.stop());
+                localStream = null;
+                socket.emit('stop_sharing');
+                btn.classList.replace('btn-danger', 'btn-warning');
+                btn.innerHTML = '<i class="fas fa-desktop"></i> Ekran Ulashish';
+            } else {
+                // Start
+                try {
+                    localStream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: false });
+                    socket.emit('start_sharing');
+                    btn.classList.replace('btn-warning', 'btn-danger');
+                    btn.innerHTML = '<i class="fas fa-stop-circle"></i> To\'xtatish';
+
+                    localStream.getVideoTracks()[0].onended = () => {
+                        toggleScreenShare(); // Handle UI update if user stops via browser UI
+                    };
+                } catch (e) {
+                    console.error(e);
+                    alert("Ekran ulashilmadi");
+                }
+            }
+        }
+
+        async function createPeerConnectionForStudent(adminSocketId) {
+            localPc = new RTCPeerConnection(iceConfig);
+            localStream.getTracks().forEach(track => localPc.addTrack(track, localStream));
+
+            localPc.onicecandidate = event => {
+                if (event.candidate) {
+                    socket.emit('screen_candidate', { targetSocketId: adminSocketId, candidate: event.candidate });
+                }
+            };
+
+            const offer = await localPc.createOffer();
+            await localPc.setLocalDescription(offer);
+            socket.emit('screen_offer', { targetSocketId: adminSocketId, offer });
+        }
+
+        // --- STUDENT UI ---
+        async function showStudentTests() {
+            showSection('studentSection');
+            document.getElementById('studentInfo').textContent = `${currentUser.firstName} ${currentUser.lastName}`;
+            try {
+                const res = await fetch(`${CONFIG.API_BASE_URL}/tests/student/${currentUser.groupCode}`);
+                const data = await res.json();
+
+                const container = document.getElementById('studentContent');
+                if (!data.success || !data.tests.length) {
+                    container.innerHTML = `<div class="alert alert-info">Hozircha testlar yo'q. Guruh: ${currentUser.groupCode}</div>`;
+                    return;
+                }
+
+                // Extract unique subjects
+                const subjects = [...new Set(data.tests.map(t => t.subject || 'Umumiy'))];
+
+                container.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <select class="form-select w-auto" id="studentSubjectFilter" onchange="filterTests()">
+                            <option value="ALL">Barcha Fanlar</option>
+                            ${subjects.map(s => `<option value="${s}">${s}</option>`).join('')}
+                        </select>
+                        <div>
+                            <button class="btn btn-outline-primary me-2" onclick="showMyResults()"><i class="fas fa-history"></i> Natijalarim</button>
+                            <button class="btn btn-outline-secondary" onclick="toggleDarkMode()"><i class="fas fa-moon"></i></button>
+                        </div>
+                    </div>
+                    <div class="row" id="testsContainer">
+                        ${renderTestCards(data.tests)}
+                    </div>
+                `;
+
+                // Store tests globally for filtering
+                window.allStudentTests = data.tests;
+            } catch (e) {
+                console.error(e);
+                alert('Testlarni yuklashda xatolik!');
+            }
+        }
+
+        function filterTests() {
+            const subject = document.getElementById('studentSubjectFilter').value;
+            const filtered = subject === 'ALL'
+                ? window.allStudentTests
+                : window.allStudentTests.filter(t => (t.subject || 'Umumiy') === subject);
+
+            document.getElementById('testsContainer').innerHTML = renderTestCards(filtered);
+        }
+
+        function renderTestCards(tests) {
+            if (!tests.length) return '<div class="col-12"><p class="text-muted">Bu fandan testlar yo\'q.</p></div>';
+            return tests.map(t => `
+                <div class="col-md-4 mb-3">
+                    <div class="card test-card h-100">
+                        <div class="card-body d-flex flex-column">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="badge bg-info">${t.subject || 'Umumiy'}</span>
+                                <span class="badge bg-warning text-dark"><i class="fas fa-clock"></i> ${t.timeLimit} min</span>
+                            </div>
+                            <h5 class="card-title">${t.title}</h5>
+                            <p class="card-text text-muted small">${t.questions.length} ta savol</p>
+                            <button class="btn btn-primary mt-auto w-100" onclick="startTest('${t._id}')">Boshlash</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function showMyResults() {
+            const res = await fetch(`${CONFIG.API_BASE_URL}/results/my?userId=${currentUser.id || currentUser._id}`);
+            const data = await res.json();
+            const container = document.getElementById('studentContent');
+
+            container.innerHTML = `
+                <div class="d-flex justify-content-between mb-3">
+                    <h3>Mening Natijalarim</h3>
+                    <button class="btn btn-secondary" onclick="showStudentTests()"><i class="fas fa-arrow-left"></i> Orqaga</button>
+                </div>
+                <div class="table-responsive bg-white rounded shadow-sm p-3">
+                    <table class="table table-hover">
+                        <thead><tr><th>Test</th><th>Natija</th><th>Ball</th><th>Sana</th></tr></thead>
+                        <tbody>
+                            ${data.results.map(r => {
+                const test = r.testId || { title: 'O\'chirilgan Test' };
+                const date = new Date(r.submittedAt).toLocaleString('uz-UZ');
+                const statusClass = r.percentage >= 60 ? 'text-success' : 'text-danger';
+                return `
+                                    <tr>
+                                        <td>${test.title}</td>
+                                        <td class="${statusClass} fw-bold">${r.percentage}%</td>
+                                        <td>${r.score} / ${r.totalScore}</td>
+                                        <td class="small text-muted">${date}</td>
+                                    </tr>
+                                `;
+            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        let customTestState = {
+            questions: [],
+            answers: [],
+            currentIndex: 0,
+            testId: null,
+            timerInterval: null
+        };
+
+        async function startTest(id) {
+            const res = await fetch(`${CONFIG.API_BASE_URL}/tests/${id}`);
+            const data = await res.json();
+            const test = data.test;
+
+            // Randomize Questions & Options (Anti-Cheat)
+            test.questions = test.questions.sort(() => Math.random() - 0.5);
+            test.questions.forEach(q => q.options.sort(() => Math.random() - 0.5));
+
+            // Request Fullscreen (Anti-Cheat)
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch(e => console.log(e));
+            }
+
+            // Initialize State
+            customTestState = {
+                questions: test.questions,
+                answers: new Array(test.questions.length).fill(null),
+                currentIndex: 0,
+                testId: test._id,
+                timerInterval: null,
+                warnings: 0,
+                maxWarnings: 3
+            };
+
+            // --- ANTI-CHEAT PRO START ---
+            // 1. Tab Switch Detection
+            document.addEventListener("visibilitychange", handleVisibilityChange);
+
+            // 2. Window Blur Detection
+            window.addEventListener("blur", handleBlur);
+
+            // 3. Disable Copy/Paste/Right Click
+            document.addEventListener("contextmenu", preventDefault);
+            document.addEventListener("copy", preventDefault);
+            document.addEventListener("cut", preventDefault);
+            document.addEventListener("paste", preventDefault);
+            // --- ANTI-CHEAT PRO END ---
+
+            const container = document.getElementById('studentContent');
+            container.innerHTML = `
+                <div class="d-flex justify-content-between mb-5 align-items-center">
+                    <h4 class="mb-0 pt-4">${test.title}</h4>
+                    <div class="timer" id="timerDisplay">00:00</div>
+                </div>
+                <div class="q-nav" id="qNav"></div>
+                <div id="currentQuestionBox" class="question-box"></div>
+                <div class="d-flex justify-content-between mt-3">
+                    <button class="btn btn-secondary" onclick="prevQuestion()" id="btnPrev" disabled><i class="fas fa-arrow-left"></i> Oldingi</button>
+                    <div>
+                        <button class="btn btn-warning me-2" onclick="skipQuestion()"><i class="fas fa-forward"></i> O'tkazib yuborish</button>
+                        <button class="btn btn-primary" onclick="nextQuestion()" id="btnNext">Keyingi <i class="fas fa-arrow-right"></i></button>
+                        <button class="btn btn-success" onclick="finishTest()" id="btnFinish" style="display:none;">Yakunlash <i class="fas fa-check"></i></button>
+                    </div>
+                </div>
+            `;
+
+            renderQuestion();
+            updateNav();
+
+            // Timer Logic
+            let timeLeft = test.timeLimit * 60;
+            customTestState.timerInterval = setInterval(() => {
+                const display = document.getElementById('timerDisplay');
+                if (!display) { clearInterval(customTestState.timerInterval); return; }
+
+                const m = Math.floor(timeLeft / 60);
+                const s = timeLeft % 60;
+                display.innerText = `${m}:${s < 10 ? '0' + s : s}`;
+
+                // Visual Warning (< 1 min)
+                if (timeLeft < 60) display.classList.add('warning');
+                else display.classList.remove('warning');
+
+                if (timeLeft <= 0) {
+                    clearInterval(customTestState.timerInterval);
+                    finishTest(true);
+                }
+                timeLeft--;
+            }, 1000);
+
+            socket.emit('test_action', { type: 'start', testId: test._id, testTitle: test.title });
+        }
+
+        function renderQuestion() {
+            const q = customTestState.questions[customTestState.currentIndex];
+            const savedAns = customTestState.answers[customTestState.currentIndex];
+
+            document.getElementById('currentQuestionBox').innerHTML = `
+                <h5 class="mb-3">Savol ${customTestState.currentIndex + 1} / ${customTestState.questions.length}</h5>
+                <p class="lead">${q.text}</p>
+                <div class="mt-3">
+                    ${q.options.map(o => `
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="currentQ" value="${o}" 
+                                id="opt_${o}" ${savedAns === o ? 'checked' : ''} onchange="saveAnswer('${o}')">
+                            <label class="form-check-label" for="opt_${o}">${o}</label>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            // Button States
+            document.getElementById('btnPrev').disabled = customTestState.currentIndex === 0;
+            if (customTestState.currentIndex === customTestState.questions.length - 1) {
+                document.getElementById('btnNext').style.display = 'none';
+                document.getElementById('btnFinish').style.display = 'inline-block';
+            } else {
+                document.getElementById('btnNext').style.display = 'inline-block';
+                document.getElementById('btnFinish').style.display = 'none';
+            }
+            updateNav();
+        }
+
+        function saveAnswer(ans) {
+            customTestState.answers[customTestState.currentIndex] = ans;
+            updateNav();
+        }
+
+        function updateNav() {
+            const nav = document.getElementById('qNav');
+            nav.innerHTML = customTestState.questions.map((_, i) => {
+                let cls = 'q-bubble';
+                if (i === customTestState.currentIndex) cls += ' active';
+                if (customTestState.answers[i]) cls += ' answered';
+                // If it's not answered and index < currentIndex, or explicitly skipped (we can track this later if needed, mostly user just skips via next)
+                return `<div class="${cls}" onclick="jumpTo(${i})">${i + 1}</div>`;
+            }).join('');
+        }
+
+        function nextQuestion() {
+            if (customTestState.currentIndex < customTestState.questions.length - 1) {
+                customTestState.currentIndex++;
+                renderQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            if (customTestState.currentIndex > 0) {
+                customTestState.currentIndex--;
+                renderQuestion();
+            }
+        }
+
+        function skipQuestion() {
+            // Just move to next, don't validate answer
+            // Mark as skipped in UI? logic is same as unanswered for now
+            nextQuestion();
+        }
+
+        function jumpTo(i) {
+            customTestState.currentIndex = i;
+            renderQuestion();
+        }
+
+        function preventDefault(e) {
+            e.preventDefault();
+            return false;
+        }
+
+        function handleVisibilityChange() {
+            if (document.hidden) {
+                issueWarning("Siz test sahifasidan chiqdingiz (Tab Switch)!");
+            }
+        }
+
+        function handleBlur() {
+            // Optional: Blur is too sensitive sometimes, maybe rely mostly on visibilitychange
+            // issueWarning("Diqqat! Ekranni tark etmang!"); 
+        }
+
+        function issueWarning(msg) {
+            if (!customTestState.timerInterval) return; // Test finished or not started
+
+            customTestState.warnings++;
+            alert(`⚠️ DIQQAT! (${customTestState.warnings}/${customTestState.maxWarnings})\n${msg}\nAgar qoida buzilishi davom etsa, test avtomatik yakunlanadi!`);
+
+            if (customTestState.warnings >= customTestState.maxWarnings) {
+                finishTest(true); // Force finish
+            }
+        }
+
+        async function finishTest(force = false) {
+            // CLEANUP ANTI-CHEAT
+            document.removeEventListener("visibilitychange", handleVisibilityChange);
+            window.removeEventListener("blur", handleBlur);
+            document.removeEventListener("contextmenu", preventDefault);
+            document.removeEventListener("copy", preventDefault);
+            document.removeEventListener("cut", preventDefault);
+            document.removeEventListener("paste", preventDefault);
+
+            const answered = customTestState.answers.filter(a => a).length;
+            const total = customTestState.questions.length;
+
+            if (!force && answered < total) {
+                if (!confirm(`Siz ${answered}/${total} ta savolga javob berdingiz. Rostdan ham yakunlaysizmi?`)) return;
+            }
+
+            clearInterval(customTestState.timerInterval);
+
+            try {
+                const res = await fetch(`${CONFIG.API_BASE_URL}/results/submit`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        testId: customTestState.testId,
+                        userId: currentUser.id || currentUser._id,
+                        answers: customTestState.answers
+                    })
+                });
+                const data = await res.json();
+
+                socket.emit('test_action', { type: 'finish' });
+
+                // Show Results Modal
+                const modalHtml = `
+                    <div class="modal fade" id="resultModal" tabindex="-1" data-bs-backdrop="static">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content result-card">
+                                <h3>Natija</h3>
+                                <h1 class="display-1 fw-bold">${data.result.percentage}%</h1>
+                                <p class="lead">${data.result.score} / ${data.result.totalScore} ball</p>
+                                <div class="d-flex justify-content-center gap-2 mt-3">
+                                    <button class="btn btn-outline-light" onclick="viewTestReview()">Xatolarni Ko'rish</button>
+                                    <button class="btn btn-light" onclick="location.reload()">Yopish</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                new bootstrap.Modal(document.getElementById('resultModal')).show();
+            } catch (e) { alert('Xatolik yuz berdi'); }
+        }
+
+        function viewTestReview() {
+            const container = document.getElementById('studentContent');
+            bootstrap.Modal.getInstance(document.getElementById('resultModal')).hide();
+
+            container.innerHTML = `
+                <div class="d-flex justify-content-between mb-4">
+                    <h3>Test Tahlili</h3>
+                    <button class="btn btn-primary" onclick="showStudentTests()">Chiqish</button>
+                </div>
+                ${customTestState.questions.map((q, i) => {
+                const userAns = customTestState.answers[i];
+                const isCorrect = userAns === q.correct;
+                const cardClass = isCorrect ? 'border-success' : 'border-danger';
+                const badge = isCorrect ? '<span class="badge bg-success">To\'g\'ri</span>' : '<span class="badge bg-danger">Xato</span>';
+
+                return `
+                        <div class="card mb-3 ${cardClass}">
+                            <div class="card-body">
+                                <h5 class="card-title">${i + 1}. ${q.text} ${badge}</h5>
+                                <ul class="list-group list-group-flush">
+                                    ${q.options.map(o => {
+                    let itemClass = '';
+                    if (o === q.correct) itemClass = 'list-group-item-success';
+                    else if (o === userAns) itemClass = 'list-group-item-danger';
+
+                    return `<li class="list-group-item ${itemClass}">
+                                            ${o} 
+                                            ${o === q.correct ? '<i class="fas fa-check float-end"></i>' : ''}
+                                            ${o === userAns && o !== q.correct ? '<i class="fas fa-times float-end"></i>' : ''}
+                                        </li>`;
+                }).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+            }).join('')}
+                <button class="btn btn-primary w-100 mt-3" onclick="showStudentTests()">Tugatish</button>
+            `;
+        }
+
+        // --- ADMIN UI ---
+        async function showAdminDashboard() {
+            showSection('adminSection');
+            const res = await fetch(`${CONFIG.API_BASE_URL}/admin/stats`);
+            const data = await res.json();
+            document.getElementById('adminContent').innerHTML = `
+                <h3>Dashboard</h3>
+                <div class="row mt-4">
+                    <div class="col-6 col-md-3"><div class="stat-card"><h3>${data.students}</h3><p>O'quvchilar</p></div></div>
+                    <div class="col-6 col-md-3"><div class="stat-card"><h3>${data.tests}</h3><p>Testlar</p></div></div>
+                </div>
+            `;
+        }
+
+        function showAITestCreator() {
+            new bootstrap.Modal(document.getElementById('aiTestModal')).show();
+            const dz = document.getElementById('aiDropZone');
+            const inp = document.getElementById('aiFileInput');
+            dz.onclick = () => inp.click();
+            inp.onchange = () => document.getElementById('aiFileName').textContent = inp.files[0]?.name;
+        }
+
+        async function generateAITest() {
+            const formData = new FormData();
+            formData.append('file', document.getElementById('aiFileInput').files[0]);
+            formData.append('subject', document.getElementById('aiTestSubject').value);
+            formData.append('count', document.getElementById('aiQuestionCount').value);
+            formData.append('timeLimit', document.getElementById('aiTimeLimit').value);
+            formData.append('passPercentage', document.getElementById('aiPass').value || 60);
+            formData.append('groupCode', document.getElementById('aiGroupCode').value);
+
+            document.getElementById('aiProcessingStatus').style.display = 'block';
+            try {
+                const res = await fetch(`${CONFIG.API_BASE_URL}/admin/ai-generate`, { method: 'POST', body: formData });
+                const data = await res.json();
+                if (data.success) {
+                    alert('Test yaratildi');
+                    bootstrap.Modal.getInstance(document.getElementById('aiTestModal')).hide();
+                } else alert(data.error);
+            } catch (e) { alert('Xatolik'); }
+            document.getElementById('aiProcessingStatus').style.display = 'none';
+        }
+
+        // MANUAL TEST CREATOR
+        function showManualTestCreator() {
+            new bootstrap.Modal(document.getElementById('manualTestModal')).show();
+            document.getElementById('mQuestions').innerHTML = '';
+            mQuestionsCount = 0;
+            addMQuestion();
+        }
+
+        function addMQuestion() {
+            mQuestionsCount++;
+            const div = document.createElement('div');
+            div.className = 'card card-body mb-2 bg-light';
+            div.id = `mq_${mQuestionsCount}`;
+            div.innerHTML = `
+                <h6>Savol ${mQuestionsCount}</h6>
+                <input type="text" class="form-control mb-2 mq-text" placeholder="Savol matni">
+                <div class="input-group mb-1">
+                    <div class="input-group-text">
+                        <input class="form-check-input mt-0" type="radio" name="rad_${mQuestionsCount}" value="0" checked>
+                    </div>
+                    <input type="text" class="form-control mq-opt" placeholder="Variant A">
+                </div>
+                <div class="input-group mb-1">
+                    <div class="input-group-text">
+                        <input class="form-check-input mt-0" type="radio" name="rad_${mQuestionsCount}" value="1">
+                    </div>
+                    <input type="text" class="form-control mq-opt" placeholder="Variant B">
+                </div>
+                <div class="input-group mb-1">
+                    <div class="input-group-text">
+                        <input class="form-check-input mt-0" type="radio" name="rad_${mQuestionsCount}" value="2">
+                    </div>
+                    <input type="text" class="form-control mq-opt" placeholder="Variant C">
+                </div>
+                <div class="input-group mb-1">
+                    <div class="input-group-text">
+                        <input class="form-check-input mt-0" type="radio" name="rad_${mQuestionsCount}" value="3">
+                    </div>
+                    <input type="text" class="form-control mq-opt" placeholder="Variant D">
+                </div>
+            `;
+            document.getElementById('mQuestions').appendChild(div);
+        }
+
+        async function saveManualTest() {
+            const questions = [];
+            let isValid = true;
+
+            document.querySelectorAll('#mQuestions .card').forEach((card, index) => {
+                const text = card.querySelector('.mq-text').value;
+                if (!text.trim()) { isValid = false; return; }
+
+                const optsInputs = Array.from(card.querySelectorAll('.mq-opt'));
+                let opts = optsInputs.map(i => i.value);
+                let correctAnswer = null;
+
+                // Priority 1: Check for # in text
+                opts = opts.map((opt, i) => {
+                    if (opt.includes('#')) {
+                        correctAnswer = opt.replace('#', '').trim();
+                        return correctAnswer;
+                    }
+                    return opt;
+                });
+
+                // Priority 2: Radio button if no # found
+                if (!correctAnswer) {
+                    const radioName = card.querySelector('input[type="radio"]').name;
+                    const selectedIdx = document.querySelector(`input[name="${radioName}"]:checked`).value;
+                    correctAnswer = opts[selectedIdx];
+                }
+
+                if (!correctAnswer) { isValid = false; return; }
+
+                questions.push({
+                    text,
+                    options: [...opts].sort(() => Math.random() - 0.5), // Shuffle copy of options
+                    correct: correctAnswer
+                });
+            });
+
+            if (!questions.length || !isValid) {
+                alert('Barcha savollar va variantlarni to\'ldiring!');
+                return;
+            }
+
+            const body = {
+                title: document.getElementById('mTitle').value,
+                subject: document.getElementById('mSubject').value,
+                timeLimit: document.getElementById('mTime').value,
+                groupCode: document.getElementById('mGroup').value,
+                passPercentage: document.getElementById('mPass').value || 60,
+                questions
+            };
+
+            await fetch(`${CONFIG.API_BASE_URL}/admin/tests/create`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            alert('Test muvaffaqiyatli saqlandi! ✅');
+            bootstrap.Modal.getInstance(document.getElementById('manualTestModal')).hide();
+        }
+
+        // STUDENTS LIST
+        async function showStudents() {
+            const res = await fetch(`${CONFIG.API_BASE_URL}/admin/users`);
+            const data = await res.json();
+            document.getElementById('adminContent').innerHTML = `
+                <h3>O'quvchilar</h3>
+                <table class="table table-striped mt-3">
+                    <thead><tr><th>Ism</th><th>Familiya</th><th>Guruh</th><th>Tel</th></tr></thead>
+                    <tbody>
+                        ${data.users.map(u => `
+                            <tr>
+                                <td>${u.firstName}</td>
+                                <td>${u.lastName}</td>
+                                <td><span class="badge bg-info">${u.groupCode}</span></td>
+                                <td>${u.phone}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        async function showAdminResults() {
+            const res = await fetch(`${CONFIG.API_BASE_URL}/admin/results`);
+            const data = await res.json();
+            document.getElementById('adminContent').innerHTML = `
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3>Natijalar va Statistika</h3>
+                    <div>
+                        <button class="btn btn-success btn-sm me-2" onclick="exportToExcel()"><i class="fas fa-file-excel"></i> Excelga yuklash</button>
+                        <button class="btn btn-danger btn-sm" onclick="clearAllResults()"><i class="fas fa-trash"></i> Tarixni Tozalash</button>
+                    </div>
+                </div>
+                <div class="table-responsive bg-white rounded shadow-sm p-3">
+                    <table class="table table-hover" id="resultsTable">
+                        <thead>
+                            <tr>
+                                <th>O'quvchi</th>
+                                <th>Guruh</th>
+                                <th>Test</th>
+                                <th>Natija</th>
+                                <th>Ball</th>
+                                <th>Vaqt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.results.map(r => {
+                const user = r.userId || { firstName: 'Noma\'lum', lastName: '', groupCode: '-' };
+                const test = r.testId || { title: 'O\'chirilgan Test' };
+                const date = new Date(r.submittedAt).toLocaleString('uz-UZ');
+                const statusClass = r.percentage >= 60 ? 'text-success' : 'text-danger';
+                return `
+                                    <tr>
+                                        <td>${user.firstName} ${user.lastName}</td>
+                                        <td><span class="badge bg-secondary">${user.groupCode}</span></td>
+                                        <td>${test.title}</td>
+                                        <td class="${statusClass} fw-bold">${r.percentage}%</td>
+                                        <td>${r.score} / ${r.totalScore}</td>
+                                        <td class="small text-muted">${date}</td>
+                                    </tr>
+                                `;
+            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function exportToExcel() {
+            let table = document.getElementById("resultsTable");
+            let rows = [];
+            for (let i = 0, row; row = table.rows[i]; i++) {
+                let cols = [];
+                for (let j = 0, col; col = row.cells[j]; j++) {
+                    cols.push('"' + col.innerText + '"');
+                }
+                rows.push(cols.join(","));
+            }
+            let csvContent = "data:text/csv;charset=utf-8," + rows.join("\n");
+            let encodedUri = encodeURI(csvContent);
+            let link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "turon_natijalar.csv");
+            document.body.appendChild(link);
+            link.click();
+        }
+
+        async function clearAllResults() {
+            if (confirm("DIQQAT! Barcha test natijalari o'chiriladi. Tasdiqlaysizmi?")) {
+                await fetch(`${CONFIG.API_BASE_URL}/admin/results`, { method: 'DELETE' });
+                showAdminResults();
+            }
+        }
+
+        async function showAdminTests() {
+            const res = await fetch(`${CONFIG.API_BASE_URL}/admin/tests`);
+            const data = await res.json();
+            document.getElementById('adminContent').innerHTML = `<h3>Testlar</h3><div class="row">${data.tests.map(t => `
+                <div class="col-md-4 mt-3"><div class="card"><div class="card-body">
+                    <h5>${t.title}</h5>
+                    <div class="text-muted small mb-2">Guruh: ${t.groupCode} | ${t.questions.length} savol</div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-danger btn-sm w-50" onclick="deleteTest('${t._id}')">O'chirish</button>
+                        <button class="btn btn-info btn-sm w-50" onclick="printTest('${t._id}')"><i class="fas fa-print"></i></button>
+                    </div>
+                </div></div></div>
+            `).join('')}</div>`;
+        }
+
+        async function printTest(id) {
+            const res = await fetch(`${CONFIG.API_BASE_URL}/tests/${id}`);
+            const data = await res.json();
+            const t = data.test;
+
+            const printWindow = window.open('', '', 'width=800,height=600');
+            printWindow.document.write(`
+                <html><head><title>${t.title}</title>
+                <style>body{font-family:sans-serif;padding:20px;} .q{margin-bottom:20px;page-break-inside:avoid;} h2{text-align:center;border-bottom:2px solid #000;padding-bottom:10px;}</style>
+                </head><body>
+                <h2>${t.title} (Guruh: ${t.groupCode})</h2>
+                <p>Ism Familiya: _________________________________________ Sana: __________</p>
+                <hr>
+                ${t.questions.map((q, i) => `
+                    <div class="q">
+                        <p><strong>${i + 1}. ${q.text}</strong></p>
+                        ${q.options.map(o => `<div style="margin-left:20px;">[ ] ${o}</div>`).join('')}
+                    </div>
+                `).join('')}
+                </body></html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        async function deleteTest(id) {
+            if (confirm('O\'chirasizmi?')) {
+                await fetch(`${CONFIG.API_BASE_URL}/admin/tests/${id}`, { method: 'DELETE' });
+                showAdminTests();
+            }
+        }
+
+        function showLiveMonitoring() {
+            const container = document.getElementById('adminContent');
+            container.innerHTML = '<h3>Live Monitoring</h3><div id="monitorList"></div>';
+            const list = document.getElementById('monitorList');
+            onlineStudents.forEach(s => {
+                if (s.status === 'online') {
+                    list.innerHTML += `<div class="student-monitor">
+                        <strong>${s.firstName} ${s.lastName}</strong> (${s.groupCode})
+                        ${s.testStatus === 'taking' ? `<span class="badge bg-warning">Testda</span> Progress: ${Math.round(s.progress || 0)}%` : '<span class="badge bg-secondary">Online</span>'}
+                    </div>`;
+                }
+            });
+        }
+
+        function showScreenMirror() {
+            const container = document.getElementById('adminContent');
+            container.innerHTML = `
+                <div class="d-flex justify-content-between">
+                    <h3>Screen Mirror (Beta)</h3>
+                    <small class="text-muted">WebRTC faqat <span class="badge bg-info">https</span> yoki <span class="badge bg-info">localhost</span>da ishlaydi</small>
+                </div>
+                <div class="screen-grid" id="screenGrid"></div>
+            `;
+
+            const grid = document.getElementById('screenGrid');
+            onlineStudents.forEach(s => {
+                if (s.isSharing) {
+                    const vidId = `vid_${s.socketId}`;
+                    if (!document.getElementById(`wrap_${s.socketId}`)) {
+                        grid.innerHTML += `
+                            <div class="screen-item" id="wrap_${s.socketId}">
+                                <div class="screen-header">${s.firstName} ${s.lastName}</div>
+                                <video id="${vidId}" autoplay playsinline muted></video>
+                                <button class="btn btn-sm btn-primary w-100" onclick="requestStream('${s.socketId}')">Ko'rish</button>
+                            </div>
+                        `;
+                    }
+                }
+            });
+        }
+
+        window.requestStream = (targetSocketId) => {
+            socket.emit('join_stream', { targetSocketId });
+        };
+
+        // Dark Mode Logic
+        function toggleDarkMode() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+        }
+
+        // Initialize Theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+</body>
+
+</html>
